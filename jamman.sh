@@ -14,6 +14,8 @@
 
 loopdir="${1}/JamManStereo/Patch${2}"
 
+rm -r ${loopdir}
+
 mkdir -p ${loopdir}/PhraseA
 cp "$3" $loopdir/PhraseA/phrase.wav
 
@@ -43,3 +45,5 @@ cat << EOF >> ${loopdir}/PhraseA/phrase.xml
     <Metadata />
 </JamManPhrase>
 EOF
+
+#find ${loopdir} -regex .*xml -exec touch -t 198001011212 {} \;
