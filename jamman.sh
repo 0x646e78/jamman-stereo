@@ -43,15 +43,17 @@ loopdir="${1}/JamManStereo/Patch${2}"
 
 overwrite=y
 if [ -d "${loopdir}" ]; then
-  read 'Patch${2} already exists. Overwrite? y/n' overwrite
+  echo ""
+  read -p "Patch${2} already exists. Overwrite? [y/n]: " overwrite
+
+  if ! [[ $overwrite == 'y' ]]; then
+    echo "Exiting"
+    exit 1
+  fi
+  rm -r ${loopdir}
 fi
 
-if ! [[ $overwrite == 'y' ]]; then
-  echo "Exiting"
-  exit 1
-fi
 
-rm -r ${loopdir}
 mkdir -p ${loopdir}/PhraseA
 cp "$3" $loopdir/PhraseA/phrase.wav
 
