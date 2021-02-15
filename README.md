@@ -1,7 +1,8 @@
-# jamman-stereo
-A quick n dirty bash script to copy wav files onto the Digitech JamMan Stereo pedal as Single play patches.
+# JamMan Stereo Sample Manager
 
-Files MUST BE 16bit Stereo wav files.
+A bash script to copy wav files onto the Digitech JamMan Stereo pedal as single play patches.
+
+Files MUST BE 44.1khz 16bit Stereo wav files.
 
 Use:
 ```bash
@@ -10,6 +11,5 @@ Use:
 
 Example:
 ```bash
-./jamman /Volumes/JAMMAN 01 some\ cool\ sound.wav
+./jamman /Volumes/JAMMAN 01 ~/some\ cool\ sound.wav
 ```
-WARNING: I'm not validating parameters etc, if you miss type you could mess up your system.

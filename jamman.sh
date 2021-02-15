@@ -1,21 +1,57 @@
 #!/usr/bin/env bash
 
-# A quick n dirty bash script to copy wav files onto the            #
-# Digitech JamMan Stereo pedal.                                     #
-# Files MUST BE 16bit Stereo wav files.                             #
-#                                                                   #
-# Use it as such:                                                   #
-#   ./jamman.sh <mntpoint> <patch_number> <filename>                #
-# Example:                                                          #
-#   ./jamman /Volumes/JAMMAN 01 filename.wav                        #
-#                                                                   #
-# WARNING: I'm not validating parameters etc, if you miss type you  #
-# could mess up your system.                                        #
+# jamman.sh by dnx
+
+help() {
+	printf '\n jamman.sh\n'
+	printf ' A quick n dirty bash script to copy wav files onto the'
+	printf ' Digitech JamMan Stereo pedal.\n'
+	printf '\n Files MUST BE 44.1khz 16bit Stereo wav files.\n'
+	printf '\n Usage:\n'
+	printf '  ./jamman.sh <mntpoint> <patch_number> <filename>\n'
+	printf ' Example:\n'
+	printf '  ./jamman /Volumes/JAMMAN 01 filename.wav\n\n'
+	exit 1
+}	
+
+if [ $# -ne 3 ]; then
+  help
+fi
+
+# Check sdcard
+if ! [ -d "${1}/JamManStereo" ]; then
+  echo "No JamMan mount found at ${1}"
+  echo "Check the path and if correct ensure there is a JamManStereo folder"
+  exit 1
+fi
+
+# Check patch number is valid
+if ! ((${2} >= 1 && ${2} <= 99)); then
+  echo "Patch number ${2} is invalid. Must be a value from 1 to 99"
+  exit 1
+fi
+
+# Check source file exists
+if ! [ -f "${3}" ]; then
+  echo "Source not found at ${3}"
+  exit 1
+fi
 
 loopdir="${1}/JamManStereo/Patch${2}"
 
-rm -r ${loopdir}
+# TODO: `tCheck source file is valid format
 
+overwrite=y
+if [ -d "${loopdir}" ]; then
+  read 'Patch${2} already exists. Overwrite? y/n' overwrite
+fi
+
+if ! [[ $overwrite == 'y' ]]; then
+  echo "Exiting"
+  exit 1
+fi
+
+rm -r ${loopdir}
 mkdir -p ${loopdir}/PhraseA
 cp "$3" $loopdir/PhraseA/phrase.wav
 
@@ -45,5 +81,7 @@ cat << EOF >> ${loopdir}/PhraseA/phrase.xml
     <Metadata />
 </JamManPhrase>
 EOF
+
+echo "Created ${3} as Patch${2} on JamMan sdcard"
 
 #find ${loopdir} -regex .*xml -exec touch -t 198001011212 {} \;
