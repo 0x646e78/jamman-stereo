@@ -26,8 +26,13 @@ if ! [ -d "${1}/JamManStereo" ]; then
 fi
 
 # Check patch number is valid
-if ! ((${2} >= 1 && ${2} <= 99)); then
-  echo "Patch number ${2} is invalid. Must be a value from 1 to 99"
+if ! (("${#2}" == "2")); then
+  echo "Patch number is invalid. Must be in double digits and a value from 01 to 99"
+  exit 1
+fi
+
+if ! (("${2#0}" >= "1" && "${2#0}" <= "99")); then
+  echo "Patch number is invalid. Must be in double digits and a value from 01 to 99"
   exit 1
 fi
 
